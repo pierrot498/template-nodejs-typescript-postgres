@@ -85,7 +85,7 @@ $$
 DECLARE 
     result varchar;
 Begin
-	insert into revoken_tokens(token)
+	insert into revoked_tokens(token)
     values(token_in);
 
 	return "revoked"; 
