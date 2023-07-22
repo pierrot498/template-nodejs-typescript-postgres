@@ -1,2 +1,99 @@
-# template-nodejs-typescript-postgres
-Template made for postgres database and nodejs - star it if you like
+# Template TypeScript Node.js Backend with Postgres Database
+
+This repository serves as a template for creating a TypeScript-based Node.js backend with a Postgres database. It includes configurations for various tools and technologies to help you get started quickly with building a robust backend for your projects.
+
+![Database Diagram](./sql/diagram.png)
+
+## Table of Contents
+
+- [Description](#description)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Project Structure](#project-structure)
+- [Scripts](#scripts)
+- [Dependencies](#dependencies)
+- [Environment Variables](#environment-variables)
+- [License](#license)
+
+## Description
+
+This template provides a solid foundation for a TypeScript-based Node.js backend integrated with a Postgres database. It includes configurations for ESLint, Husky, Prettier, and Swagger to ensure code quality, formatting, and documentation consistency. Additionally, it comes with Jest for testing, Flyway for database migrations, and Docker Compose for easy deployment.
+
+## Getting Started
+
+### Prerequisites
+
+Before you begin, make sure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org) (version 14 or later)
+- [Postgres](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/your-project.git
+cd your-project
+```
+
+2. Install the dependencies:
+
+```bash
+npm install
+```
+
+3. Set up the environment variables:
+
+Copy the `.env.example.local` file and rename it to `.env.local`. Then, fill in the required environment variables:
+
+```
+LOG_DIR="../logs"
+DB_HOST=your_database_host
+DB_PORT=your_database_port
+DB_USER=your_database_username
+DB_PASSWORD=your_database_password
+DB_DATABASE=your_database_name
+```
+
+Make sure to replace `your_database_host`, `your_database_port`, `your_database_username`, `your_database_password`, and `your_database_name` with the appropriate values.
+
+## Project Structure
+
+The project structure is organized as follows:
+
+- `config`: Contains configuration files for various tools (ESLint, Prettier, etc.).
+- `exceptions`: Holds custom exception classes for error handling.
+- `interfaces`: Includes TypeScript interfaces for data structures.
+- `main/resources/db/migrations`: Stores Flyway database migration scripts.
+- `middlewares`: Contains custom middleware functions.
+- `routes`: Defines Express routes for different API endpoints.
+- `schemas`: Includes JSON schemas for validating request and response data.
+- `services`: Contains business logic and interaction with the database.
+- `tests/endpoints`: Houses integration tests for API endpoints.
+
+## Scripts
+
+- `npm start`: Builds the project and starts the server.
+- `npm run dev`: Builds the project and starts the server in development mode using Nodemon.
+- `npm run build`: Compiles the TypeScript code using SWC and generates the `dist` folder.
+- `npm run lint`: Lints the TypeScript code using ESLint.
+- `npm run lint:fix`: Fixes linting errors automatically.
+- `npm test`: Runs Jest tests with coverage and various options.
+- `npm run unit:test`: Runs Jest unit tests and generates coverage reports.
+
+## Dependencies
+
+The project utilizes several dependencies, including Express, Postgres, Jest, Axios, and others. You can find the complete list of dependencies and devDependencies in the `package.json` file.
+
+## Environment Variables
+
+The project requires specific environment variables for configuration. Refer to the [Installation](#installation) section for details on setting up the `.env.local` file.
+
+## License
+
+This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
+
+Feel free to use this template as a starting point for your Node.js projects. Happy coding! 🚀
