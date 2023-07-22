@@ -233,7 +233,6 @@ END
 $$;
 
 
-
 -- creates or replaces a stored function called archive_user
 -- returns the archived message
 CREATE OR REPLACE FUNCTION archive_user(

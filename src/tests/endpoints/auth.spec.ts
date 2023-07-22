@@ -41,7 +41,7 @@ describe("Auth", (): void => {
 	});
 	it("POST /logout client", async (): Promise<void> => {
 		const response = await request(app)
-			.post("/login")
+			.post("/logout")
 			.send({
 				email: "client@gmail.com",
 				password: "testclient50",

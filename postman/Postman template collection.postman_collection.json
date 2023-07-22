@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "483ce6a3-57f8-435f-ab44-fe5ea6d65ddf",
+		"name": "Postman template collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \n    \"name\":\"test\",\n    \"email\":\"test@t.tt\",\n    \"password\":\"test123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/signup",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \n    \"email\":\"test@t.tt\",\n    \"password\":\"test123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/login",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/logout",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User queries",
+					"item": [
+						{
+							"name": "Create user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"user1\",\n    \"email\":\"user1@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/user",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/3",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"user1\",\n    \"email\":\"user1@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/user/4",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/user/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

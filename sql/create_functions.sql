@@ -139,3 +139,77 @@ FROM (
 return json_text;
 END; $$ 
 LANGUAGE 'plpgsql';
+
+
+
+-- creates or replaces a stored function called get_password_client
+-- returns the encrypted password
+CREATE OR REPLACE FUNCTION get_password_client(
+  email_in varchar
+)
+ RETURNS varchar
+ LANGUAGE plpgsql AS
+$$
+DECLARE 
+	pass varchar;
+Begin
+	select password into pass from clients where email=email_in ;
+
+
+	return pass; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+	
+END
+$$;
+
+
+
+-- creates or replaces a stored function called get_client_id
+-- returns the id 
+CREATE OR REPLACE FUNCTION get_client_id(
+  email_in varchar
+)
+ RETURNS varchar
+ LANGUAGE plpgsql AS
+$$
+DECLARE 
+	result int;
+Begin
+	select id into result from clients where email=email_in ;
+
+
+	return result; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+	
+END
+$$;
+
+
+-- creates or replaces a stored function called archive_user
+-- returns the archived message
+CREATE OR REPLACE FUNCTION archive_user(
+  user_id_in int,
+  client_id_in int
+)
+ RETURNS varchar
+ LANGUAGE plpgsql AS
+$$
+DECLARE 
+    result int;
+Begin
+	update users 
+    set status='Archived'
+    where id=user_id_in and client_id=client_id_in;
+
+
+	return 'Archived'; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+	
+END
+$$;
