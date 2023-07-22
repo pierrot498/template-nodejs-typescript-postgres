@@ -74,7 +74,6 @@ EXCEPTION
 END
 $$;
 
-
 -- creates or replaces a stored function called revoke_token 
 -- returns a boolean
 CREATE OR REPLACE FUNCTION revoke_token(
@@ -97,6 +96,7 @@ EXCEPTION
 END
 $$;
 
+
 -- creates or replaces a stored function called get_user_by_client_id
 -- retrieves user profile data
 CREATE OR REPLACE FUNCTION get_user_by_client_id_by_id(
@@ -116,30 +116,74 @@ LANGUAGE 'plpgsql';
 
 
 
--- creates or replaces a stored function called get_user_json
--- retrieves supplier company profile json
-CREATE OR REPLACE FUNCTION get_user_json(
-    id_in int,
-    client_id_in int
-) 
-    RETURNS text
-AS $$
-DECLARE
-	json_text text := '';
-BEGIN
-SELECT json_strip_nulls(row_to_json(nested_u)) into json_text
-FROM (
-	SELECT u.name,u.email,u.created_at,u.updated_at
-	from users u
-	where id=id_in and client_id=client_id_in and u.status = 'Active'
-	limit 1
 
-) nested_u;
 
-return json_text;
-END; $$ 
-LANGUAGE 'plpgsql';
+-- creates or replaces a stored function called update_user
+-- updates user profile data
+CREATE OR REPLACE FUNCTION update_user_by_client_id_by_id(
+    client_id_in int,
+    user_id int, 
+    name_in varchar,
+    email_in varchar
 
+)
+ RETURNS int
+ LANGUAGE plpgsql AS
+$$
+#variable_conflict use_variable
+DECLARE 
+  
+    result int := null;
+   
+Begin
+    SELECT id FROM users WHERE id=user_id AND client_id=client_id_in
+    into result;
+
+    UPDATE users
+        SET 
+        name=name_in,
+        email=email_in,
+        updated_at=NOW()
+    WHERE id=user_id;
+
+    return result; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+END
+$$;
+
+
+
+-- creates or replaces a stored function called insert_user
+-- inserts user profile data
+CREATE OR REPLACE FUNCTION insert_user(
+    client_id_in int,
+    name_in varchar,
+    email_in varchar
+
+)
+ RETURNS int
+ LANGUAGE plpgsql AS
+$$
+#variable_conflict use_variable
+DECLARE 
+  
+    result int := null;
+   
+Begin
+   
+
+    insert into users(name,email,client_id,created_at)
+    values(name_in,email_in,client_id_in,NOW())
+    returning id into result;
+
+    return result; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+END
+$$;
 
 
 -- creates or replaces a stored function called get_password_client
