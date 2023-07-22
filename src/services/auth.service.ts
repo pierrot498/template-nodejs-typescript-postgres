@@ -69,7 +69,7 @@ class AuthService {
 
 		const client_id = res.rows[0].get_client_id;
 
-		const token = jwt.sign({ id: client_id }, SECRET, {
+		const token = jwt.sign({ id: client_id }, SECRET || "default", {
 			algorithm: "HS256",
 
 			expiresIn: 86400, // 24 hours
@@ -88,7 +88,7 @@ class AuthService {
 	 * @description logs out an existing client and should revoke jwt
 	 */
 	public async logout(accessToken: string): Promise<String> {
-		await jwt.verify(accessToken, SECRET);
+		await jwt.verify(accessToken, SECRET || "default");
 
 		const client = await db.query({
 			text: "select * from revoke_token($1)",
