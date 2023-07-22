@@ -29,8 +29,9 @@ const authenticate = async (
 		} else if (req.path.startsWith("/logout")) {
 			const accessToken = getAccessToken(req);
 			//Checks if token is verified
+
 			await verifyToken(accessToken);
-			req.token = accessToken;
+			res.locals.token = accessToken;
 		} else {
 			logger.error(`The provided URI is invalid - ${req.path}`);
 			throw new HttpException(404, "Invalid URI");

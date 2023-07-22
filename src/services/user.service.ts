@@ -115,6 +115,26 @@ class UserService {
 
 		return update;
 	}
+
+	/**
+	 * @method findUserById
+	 * @param {Request} id
+	 * @param {Response} client_id
+	 * @return {Promise<any>} findUser
+	 * @description retrieves an existing user
+	 */
+	public async findUserById(id: Number, client_id: Number): Promise<any> {
+		logger.info(
+			`User searched for user ${Number(id)} and client id ${Number(client_id)}`,
+		);
+
+		const findUser = await db.query({
+			text: "select * from get_user_json($1, $2)",
+			values: [id, client_id],
+		});
+		console.log(findUser);
+		return findUser;
+	}
 }
 
 export default UserService;
