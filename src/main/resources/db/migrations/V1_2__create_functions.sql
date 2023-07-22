@@ -88,7 +88,7 @@ Begin
 	insert into revoked_tokens(token)
     values(token_in);
 
-	return "revoked"; 
+	return 'revoked'; 
 EXCEPTION
     WHEN OTHERS THEN
     ROLLBACK;
