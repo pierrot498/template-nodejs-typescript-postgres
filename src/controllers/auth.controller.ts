@@ -85,7 +85,7 @@ class AuthController {
 	): Promise<any> => {
 		try {
 			const clientAuth = new AuthService();
-			const accessToken: string = req.body.accessToken;
+			const accessToken: string = res.locals.token;
 			const result = await clientAuth.logout(accessToken);
 			res.status(200).json({ message: "Logout successful" });
 		} catch (error) {

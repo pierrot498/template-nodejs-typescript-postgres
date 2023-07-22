@@ -19,10 +19,10 @@ CREATE TABLE "clients" (
 );
 
 
--- creates revoken_tokens table to store revoked jwt
-CREATE TABLE "revoken_tokens" (
+-- creates revoked_tokens table to store revoked jwt
+CREATE TABLE "revoked_tokens" (
   "id" serial PRIMARY KEY,
-  "token" varchar
+  "token" varchar unique
 );
 
 ALTER TABLE "users" ADD FOREIGN KEY ("client_id") REFERENCES "clients" ("id");

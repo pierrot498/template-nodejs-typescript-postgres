@@ -44,6 +44,7 @@ class AuthService {
 		message: string;
 	}> {
 		console.log([clientData.email, bcrypt.hashSync(clientData.password, 8)]);
+
 		const client = await db.query({
 			text: "select * from get_password_client($1)",
 			values: [clientData.email],
@@ -52,7 +53,7 @@ class AuthService {
 			clientData.password,
 			client.rows[0].get_password_client,
 		);
-		console.log(passwordIsValid);
+
 		if (!passwordIsValid) {
 			return {
 				statusCode: 401,
@@ -60,13 +61,15 @@ class AuthService {
 				response: { token: "" },
 			};
 		}
+
 		const res = await db.query({
 			text: "select * from get_client_id($1)",
 			values: [clientData.email],
 		});
+
 		const client_id = res.rows[0].get_client_id;
 
-		const token = jwt.sign({ id: client_id }, SECRET, {
+		const token = jwt.sign({ id: client_id }, SECRET || "default", {
 			algorithm: "HS256",
 
 			expiresIn: 86400, // 24 hours
@@ -85,7 +88,7 @@ class AuthService {
 	 * @description logs out an existing client and should revoke jwt
 	 */
 	public async logout(accessToken: string): Promise<String> {
-		await jwt.verify(accessToken, SECRET);
+		await jwt.verify(accessToken, SECRET || "default");
 
 		const client = await db.query({
 			text: "select * from revoke_token($1)",

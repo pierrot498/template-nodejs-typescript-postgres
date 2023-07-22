@@ -10,7 +10,7 @@ import {
 	DB_USER,
 } from "@config";
 
-const token = "";
+let token = "";
 
 afterAll(async () => {
 	await new Promise((resolve) => setTimeout(() => resolve(true), 4000)); // avoid jest open handle error
@@ -26,6 +26,31 @@ describe("Auth", (): void => {
 		});
 		expect(response.body.message).toStrictEqual("Signup Successful");
 		expect(response.statusCode).toBe(201);
+		app.close();
+	});
+
+	it("POST /login client", async (): Promise<void> => {
+		const response = await request(app).post("/login").send({
+			email: "client@gmail.com",
+			password: "testclient50",
+		});
+		expect(typeof response.body.token).toStrictEqual("string");
+		token = response.body.token;
+		expect(response.statusCode).toBe(200);
+		app.close();
+	});
+	it("POST /logout client", async (): Promise<void> => {
+		const response = await request(app)
+			.post("/logout")
+			.send({
+				email: "client@gmail.com",
+				password: "testclient50",
+			})
+			.set("Authorization", `Bearer ${token}`);
+		expect(response.body).toStrictEqual({
+			message: "Logout successful",
+		});
+		expect(response.statusCode).toBe(200);
 		app.close();
 	});
 });

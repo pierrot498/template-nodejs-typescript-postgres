@@ -29,8 +29,9 @@ const authenticate = async (
 		} else if (req.path.startsWith("/logout")) {
 			const accessToken = getAccessToken(req);
 			//Checks if token is verified
+
 			await verifyToken(accessToken);
-			req.token = accessToken;
+			res.locals.token = accessToken;
 		} else {
 			logger.error(`The provided URI is invalid - ${req.path}`);
 			throw new HttpException(404, "Invalid URI");
@@ -45,7 +46,7 @@ const authenticate = async (
 const verifyToken = async (token: string) => {
 	try {
 		//Check if revoked
-		return await jwt.verify(token, SECRET);
+		return await jwt.verify(token, SECRET || "default");
 	} catch (error) {
 		logger.error("Invalid access token provided");
 		throw new HttpException(401, "Invalid access token");

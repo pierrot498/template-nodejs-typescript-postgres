@@ -5,10 +5,10 @@ import { userData } from "@/interfaces/user.interface";
 import UserService from "@services/user.service";
 import { NextFunction, Request, Response } from "express";
 /**
- * @description User User controller class
- * Contains user  profile record management logic.
+ * @description User controller class
+ * Contains user profile record management logic.
  */
-class UserUserController {
+class UserController {
 	public userService = new UserService();
 
 	/**
@@ -132,6 +132,52 @@ class UserUserController {
 			}
 		}
 	};
+
+	/**
+	 * @method getUser
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @param {NextFunction} next
+	 * @description retrieves an existing user
+	 */
+	public getUser = async (
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> => {
+		let message: string;
+
+		const user_id = req.params.user__id;
+		let code = 0;
+		let data: any = null;
+		try {
+			const client_id = Number(res.locals.client_id);
+			const user_id = Number(req.params.user_id);
+			if (user_id > 0) {
+				const findUserData: any = await this.userService.findUserById(
+					user_id,
+					client_id,
+				);
+				const json_text = findUserData.rows[0].get_user_json;
+
+				if (json_text != null) {
+					code = 200;
+					data = JSON.parse(json_text);
+					message = `Sent (user_ID: ${user_id})`;
+				} else {
+					code = 404;
+					message = `User not found (user_ID: ${user_id})`;
+				}
+			} else {
+				code = 400;
+				message = "Invalid Input Data (not present)";
+			}
+			res.status(code).json({ message, user_id, data });
+		} catch (error) {
+			console.log(error);
+			next(error);
+		}
+	};
 }
 
-export default UserUserController;
+export default UserController;
