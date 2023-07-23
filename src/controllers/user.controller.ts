@@ -41,7 +41,7 @@ class UserController {
 				message = `User not found`;
 			}
 
-			res.status(code).json({ message: message, user_id: result });
+			res.status(code).json({ message: message, user_id: Number(result) });
 		} catch (error) {
 			next(error);
 		}
