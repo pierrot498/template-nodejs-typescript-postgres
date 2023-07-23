@@ -29,14 +29,15 @@ Before you begin, make sure you have the following installed on your system:
 - [Node.js](https://nodejs.org) (version 14 or later)
 - [Postgres](https://www.postgresql.org/)
 - [Docker](https://www.docker.com/)
+- [Postman](https://www.postman.com/downloads/)
 
 ### Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/your-project.git
-cd your-project
+git clone https://github.com/pierrot498/template-nodejs-typescript-postgres.git
+cd template-nodejs-typescript-postgres
 ```
 
 2. Install the dependencies:
@@ -56,9 +57,42 @@ DB_PORT=your_database_port
 DB_USER=your_database_username
 DB_PASSWORD=your_database_password
 DB_DATABASE=your_database_name
+SECRET=your_secret
 ```
 
 Make sure to replace `your_database_host`, `your_database_port`, `your_database_username`, `your_database_password`, and `your_database_name` with the appropriate values.
+
+## RUN in local with docker-compose up
+
+1. Navigate to the project directory:
+
+```bash
+cd template-nodejs-typescript-postgres
+```
+
+2. Start the application using `docker-compose`:
+
+```bash
+docker-compose up
+```
+
+This will set up the necessary containers and run the project locally.
+
+## Usage
+
+To interact with the API, you can use Postman with the correct "local" environment:
+
+1. Import the "local" environment under `./postman/environment/local.postman_environment.json` file into Postman. The environment file should contain variables like `BASE_URL`, `JWT_TOKEN`, etc.
+
+2. Import collection called `Postman template collection.postman_collection.json`
+
+3. Call POST `/signup` to sign up as a new client using the provided endpoint.
+
+4. Once signed up, obtain the JWT token from the response of the `/login` endpoint to get a JWT token.
+
+5. Set the obtained JWT token as the value of the `JWT_TOKEN` variable in the Postman environment.
+
+6. Now, you can perform API requests with the authenticated client and create users related to that particular client.
 
 ## Project Structure
 
