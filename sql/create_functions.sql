@@ -218,7 +218,7 @@ $$;
 
 
 -- creates or replaces a stored function called get_user_json
--- retrieves supplier company profile json
+-- retrieves user json
 CREATE OR REPLACE FUNCTION get_user_json(
     id_in int,
     client_id_in int
@@ -265,3 +265,28 @@ EXCEPTION
 	
 END
 $$;
+
+
+
+-- creates or replaces a stored function called get_user_json_patial_match_by_name
+-- retrieves users list json
+CREATE OR REPLACE FUNCTION get_user_json_patial_match_by_name(
+    search varchar,
+    client_id_in int
+) 
+    RETURNS text
+AS $$
+DECLARE
+	json_text text := '';
+BEGIN
+SELECT json_strip_nulls(row_to_json(nested_u)) into json_text
+FROM (
+	SELECT u.name,u.email,u.created_at,u.updated_at
+	from users u
+	where client_id=client_id_in and u.status = 'Active' and name ILIKE CONCAT('%',search, '%')
+
+) nested_u;
+
+return json_text;
+END; $$ 
+LANGUAGE 'plpgsql';
