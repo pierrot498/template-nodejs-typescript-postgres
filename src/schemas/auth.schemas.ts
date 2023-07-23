@@ -7,7 +7,7 @@ import { object, string } from "yup";
 
 export const clientSignup = object({
 	name: string().required(),
-	email: string().email().required(),
+	email: string().email().required("No email provided."),
 	password: string()
 		.required("No password provided.")
 		.min(8, "Password is too short - should be 8 chars minimum.")
@@ -19,7 +19,7 @@ export const clientSignup = object({
  * used to validate the api body for insert
  */
 export const clientLogin = object({
-	email: string().email().required(),
+	email: string().email().required("No email provided."),
 	password: string()
 		.required("No password provided.")
 		.min(8, "Wrong password")

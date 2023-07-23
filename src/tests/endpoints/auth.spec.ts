@@ -28,6 +28,25 @@ describe("Auth", (): void => {
 		expect(response.statusCode).toBe(201);
 		app.close();
 	});
+	it("POST /signup clients should return error 409 when email is already used", async (): Promise<void> => {
+		const response = await request(app).post("/signup").send({
+			name: "paul",
+			email: "client@gmail.com",
+			password: "testclient50",
+		});
+		expect(response.body.message).toStrictEqual("Email already used");
+		expect(response.statusCode).toBe(409);
+		app.close();
+	});
+	it("POST /signup clients should return error 400 when email is not defined", async (): Promise<void> => {
+		const response = await request(app).post("/signup").send({
+			name: "paul",
+			password: "testclient50",
+		});
+		expect(response.body.message).toStrictEqual("No email provided.");
+		expect(response.statusCode).toBe(400);
+		app.close();
+	});
 
 	it("POST /login client", async (): Promise<void> => {
 		const response = await request(app).post("/login").send({
@@ -39,6 +58,24 @@ describe("Auth", (): void => {
 		expect(response.statusCode).toBe(200);
 		app.close();
 	});
+	it("POST /login client return status 400 when email not provided", async (): Promise<void> => {
+		const response = await request(app).post("/login").send({
+			password: "testclient50",
+		});
+		expect(response.body.message).toStrictEqual("No email provided.");
+		expect(response.statusCode).toBe(400);
+		app.close();
+	});
+	it("POST /login client return status 401 when credentials are invalid", async (): Promise<void> => {
+		const response = await request(app).post("/login").send({
+			email: "client@gmail.com",
+			password: "testclient501",
+		});
+		expect(typeof response.body.message).toStrictEqual("Invalid credentials");
+		expect(response.statusCode).toBe(401);
+		app.close();
+	});
+
 	it("POST /logout client", async (): Promise<void> => {
 		const response = await request(app)
 			.post("/logout")

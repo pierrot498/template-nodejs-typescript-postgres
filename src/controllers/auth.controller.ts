@@ -37,8 +37,6 @@ class AuthController {
 				.status(201)
 				.json({ data: signUpUserData, message: "Signup Successful" });
 		} catch (error) {
-			if ((error.message = "invalid transaction termination"))
-				error.message = "Email already used";
 			next(error);
 		}
 	};
@@ -90,9 +88,9 @@ class AuthController {
 			res.status(200).json({ message: "Logout successful" });
 		} catch (error) {
 			if (error.message == "Access Token has been revoked")
-				res.status(409).json({ message: error.message });
+				res.status(403).json({ message: error.message });
 			if (error.message == "Invalid Access Token")
-				res.status(406).json({ message: error.message });
+				res.status(401).json({ message: error.message });
 			next(error);
 		}
 	};

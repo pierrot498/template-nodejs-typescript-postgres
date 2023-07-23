@@ -27,52 +27,7 @@ END
 $$;
 
 
--- creates or replaces a stored function called login_client
--- returns a boolean
-CREATE OR REPLACE FUNCTION login_client(
-  email_in varchar,
-  password_in varchar
-)
- RETURNS boolean
- LANGUAGE plpgsql AS
-$$
-DECLARE 
-	connect boolean;
-Begin
-	select count(*)>0 into connect where email=email_in and password=password_in;
-
-
-	return connect; 
-EXCEPTION
-    WHEN OTHERS THEN
-    ROLLBACK;
-	
-END
-$$;
-
-
--- creates or replaces a stored function called login_client
--- returns a boolean
-CREATE OR REPLACE FUNCTION login_client(
-  email_in varchar,
-  password_in varchar
-)
- RETURNS boolean
- LANGUAGE plpgsql AS
-$$
-DECLARE 
-	connect boolean;
-Begin
-	select count(*)>0 into connect from clients where email=email_in and password=password_in;
-
-
-	return connect; 
-EXCEPTION
-    WHEN OTHERS THEN
-    ROLLBACK;
-	
-END
-$$;
+--
 
 -- creates or replaces a stored function called revoke_token 
 -- returns a boolean
@@ -285,3 +240,28 @@ FROM (
 return json_text;
 END; $$ 
 LANGUAGE 'plpgsql';
+
+
+
+
+-- creates or replaces a stored function called check_email_taken
+-- returns a boolean
+CREATE OR REPLACE FUNCTION check_email_taken(
+  email_in varchar
+)
+ RETURNS boolean
+ LANGUAGE plpgsql AS
+$$
+DECLARE 
+	check boolean;
+Begin
+	select count(*)>0 into check from clients where email=email_in;
+
+
+	return check; 
+EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+	
+END
+$$;

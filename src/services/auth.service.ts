@@ -22,6 +22,11 @@ class AuthService {
 			logger.error("clientData is empty for signup");
 			throw new HttpException(400, "userData is empty");
 		}
+		const isEmailTaken = await this.checkIfEmailTaken(clientData.email);
+		if (isEmailTaken) {
+			throw new HttpException(409, "Email already in use");
+		}
+
 		const client = await db.query({
 			text: "select * from insert_client($1, $2, $3)",
 			values: [
@@ -55,11 +60,7 @@ class AuthService {
 		);
 
 		if (!passwordIsValid) {
-			return {
-				statusCode: 401,
-				message: "Invalid Password!",
-				response: { token: "" },
-			};
+			throw new HttpException(401, "Invalid credentials");
 		}
 
 		const res = await db.query({
@@ -90,11 +91,19 @@ class AuthService {
 	public async logout(accessToken: string): Promise<String> {
 		await jwt.verify(accessToken, SECRET || "default");
 
-		const client = await db.query({
+		const res = await db.query({
 			text: "select * from revoke_token($1)",
 			values: [accessToken],
 		});
 		return "Success logout";
+	}
+
+	private async checkIfEmailTaken(email: String): Promise<boolean> {
+		const res = await db.query({
+			text: "select * from check_email_taken($1)",
+			values: [email],
+		});
+		return res.rows[0].check_email_taken;
 	}
 }
 
