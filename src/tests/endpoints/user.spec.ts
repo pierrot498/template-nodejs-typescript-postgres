@@ -137,6 +137,36 @@ describe("Auth", (): void => {
 		expect(response.statusCode).toBe(400);
 		app.close();
 	});
+	it("GET /user?username=u should return status 200 when providing part of a inserted name", async (): Promise<void> => {
+		const response = await request(app)
+			.get("/user?username=u")
+			.send()
+			.set("Authorization", `Bearer ${token}`);
+
+		expect(response.body.message).toStrictEqual(
+			"User not found (user name like: a)",
+		);
+		expect(response.body.data[0].name).toStrictEqual("paul1");
+		expect(response.body.data[0].email).toStrictEqual("client@gmail.com");
+		expect(response.statusCode).toBe(200);
+		app.close();
+	});
+	it("GET /user?username=a should return status 404 when providing part of a unexisting user name", async (): Promise<void> => {
+		const response = await request(app)
+			.get("/user?username=a")
+			.send()
+			.set("Authorization", `Bearer ${token}`);
+
+		expect(response.body).toStrictEqual({
+			message: "User not found (user name like: a)",
+			username: "a",
+			data: null,
+		});
+
+		expect(response.statusCode).toBe(404);
+		app.close();
+	});
+
 	it("DELETE /user/:id should delete user and return status 200", async (): Promise<void> => {
 		const response = await request(app)
 			.delete("/user/" + id)

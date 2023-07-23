@@ -130,6 +130,28 @@ class UserService {
 		});
 		return findUser;
 	}
+
+	/**
+	 * @method findUserByName
+	 * @param {string} name
+	 * @param {Number} client_id
+	 * @return {Promise<any>} findUserByName
+	 * @description retrieves existing user from this particular client by name
+	 */
+	public async findUserByName(name: String, client_id: Number): Promise<any> {
+		logger.info(
+			`User searched for user with partial name ${name} and client id ${Number(
+				client_id,
+			)}`,
+		);
+		console.log([name, client_id]);
+		const findUsers = await db.query({
+			text: "select * from get_user_table_patial_match_by_name($1::varchar, $2::int)",
+			values: [name as string, client_id],
+		});
+
+		return findUsers.rows;
+	}
 }
 
 export default UserService;

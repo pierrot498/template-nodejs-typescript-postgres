@@ -268,25 +268,19 @@ $$;
 
 
 
--- creates or replaces a stored function called get_user_json_patial_match_by_name
+-- creates or replaces a stored function called get_user_table_patial_match_by_name
 -- retrieves users list json
-CREATE OR REPLACE FUNCTION get_user_json_patial_match_by_name(
+CREATE OR REPLACE FUNCTION get_user_table_patial_match_by_name(
     search varchar,
     client_id_in int
 ) 
-    RETURNS text
+   RETURNS TABLE (name varchar, email varchar, created_at timestamp, updated_at timestamp)
 AS $$
-DECLARE
-	json_text text := '';
 BEGIN
-SELECT json_strip_nulls(row_to_json(nested_u)) into json_text
-FROM (
-	SELECT u.name,u.email,u.created_at,u.updated_at
+    return query
+	SELECT u.name ,u.email,u.created_at,u.updated_at
 	from users u
-	where client_id=client_id_in and u.status = 'Active' and name ILIKE CONCAT('%',search, '%')
+	where client_id=client_id_in and u.status = 'Active' and u.name ILIKE CONCAT('%',search, '%');
 
-) nested_u;
-
-return json_text;
 END; $$ 
 LANGUAGE 'plpgsql';
