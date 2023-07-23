@@ -1,31 +1,5 @@
 version: "3.8"
 services:
-  nginx:
-    restart: always
-    build:
-      context: ./nginx
-    ports:
-      - "80:80"
-  api:
-    environment:
-        PORT: 3000
-    build:
-        context: ./
-        dockerfile: Dockerfile
-    env_file:
-      - .env.development.local
-    ports:
-      - "3000:3000"
-  api2:
-    environment:
-        PORT: 3001
-    build:
-        context: ./
-        dockerfile: Dockerfile
-    env_file:
-      - .env.development.local
-    ports:
-      - "3001:3001"
   postgres:
     image: postgres:latest
     restart: always
@@ -35,12 +9,49 @@ services:
       - POSTGRES_DB=admin
     ports:
       - "5432:5432"
-  pgadmin-compose:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "placeholder@example.com"
-      PGADMIN_DEFAULT_PASSWORD: "fakepassword123!"
+    volumes:
+        - ./sql/1_create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
+        - ./sql/2_create_functions.sql:/docker-entrypoint-initdb.d/2_create_functions.sql
+        - postgres_data:/var/lib/postgresql/data/
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
     ports:
-      - "16543:80"
+      - "80:80"
     depends_on:
       - postgres
+  api:
+    environment:
+        PORT: 3000
+        LOG_DIR: "../logs"
+        DB_HOST: postgres
+        DB_PORT: 5432
+        DB_USER: admin
+        DB_PASSWORD: admin
+        DB_DATABASE: admin
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+  api2:
+    environment:
+        PORT: 3001
+        LOG_DIR: "../logs"
+        DB_HOST: postgres
+        DB_PORT: 5432
+        DB_USER: admin
+        DB_PASSWORD: admin
+        DB_DATABASE: admin
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3001"
+volumes:
+  postgres_data:
