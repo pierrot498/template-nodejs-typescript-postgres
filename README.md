@@ -2,6 +2,7 @@
 
 This repository serves as a template for creating a TypeScript-based Node.js backend with a Postgres database. It includes configurations for various tools and technologies to help you get started quickly with building a robust backend for your projects.
 
+Here's the Database diagram :
 ![Database Diagram](./sql/diagram.png)
 
 ## Table of Contents
@@ -10,6 +11,7 @@ This repository serves as a template for creating a TypeScript-based Node.js bac
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [RUN in local with docker-compose up](#run-in-local-with-docker-compose-up)
 - [Project Structure](#project-structure)
 - [Scripts](#scripts)
 - [Dependencies](#dependencies)
@@ -127,6 +129,10 @@ The project utilizes several dependencies, including Express, Postgres, Jest, Ax
 The project requires specific environment variables for configuration. Refer to the [Installation](#installation) section for details on setting up the `.env.local` file.
 
 ## Docker compose with nginx as load balancer for 2 servers
+
+Here's the nginx load balancer diagram :
+
+![nginx load balancer Diagram](./nginx/nginx.png)
 
 - We have created a new service named `nginx`, which will act as the load balancer.
 - The Nginx configuration file `nginx.conf` is assumed to be present in the `./nginx` directory. It is mounted into the Nginx container at the path `/etc/nginx/nginx.conf`. The configuration in `nginx.conf` should include the load balancer settings, directing requests to the two `api` services (`api` and `api2`).
