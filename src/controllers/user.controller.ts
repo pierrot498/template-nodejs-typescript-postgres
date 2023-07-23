@@ -27,30 +27,21 @@ class UserController {
 		let message: string;
 		let code = 0;
 		try {
-			console.log(req.params);
-
 			const id: Number = Number(req.params.user_id);
 			const client_id = Number(res.locals.client_id);
 			const row: any = await this.userService.deleteUserById(id, client_id);
 			if (row.rowCount > 0) {
 				const returned_result = row.rows[0].archive_user;
-				if (returned_result === "user__profiles_not_found") {
-					code = 404;
-					message = "User not found (user_ID: null)";
-				} else if (returned_result === null) {
-					code = 404;
-					message = "User not found (user_ID: null)";
-				} else if (returned_result === "user__has_minted_dboe") {
-					code = 400;
-					message = "Invalid Input Data (not present)";
-				} else {
-					code = 200;
-					result = returned_result;
-					message = `Deleted (user_ID: ${returned_result})`;
-				}
+
+				code = 200;
+				result = returned_result;
+				message = `Deleted (user_ID: ${returned_result})`;
+			} else {
+				code = 404;
+				message = `User not found`;
 			}
 
-			res.status(code).json({ message: message, user_id: result });
+			res.status(code).json({ message: message, user_id: Number(result) });
 		} catch (error) {
 			next(error);
 		}
@@ -121,15 +112,9 @@ class UserController {
 			);
 			const result = registerData.rows[0].update_user;
 
-			res.status(200).json({ message: result });
+			res.status(200).json({ message: "Successfuly updated" });
 		} catch (error) {
-			if (error.message == "Account id is not related to this user") {
-				res
-					.status(409)
-					.json({ message: "Account id is not related to current user" });
-			} else {
-				next(error);
-			}
+			next(error);
 		}
 	};
 
@@ -174,7 +159,6 @@ class UserController {
 			}
 			res.status(code).json({ message, user_id, data });
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	};

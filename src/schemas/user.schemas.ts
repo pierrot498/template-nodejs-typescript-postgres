@@ -6,7 +6,7 @@ import { array, number, object, string } from "yup";
  */
 export const userSchema = object({
 	name: string().required(),
-	email: string().email().required(),
+	email: string().email("Valid email not provided.").required(),
 })
 	.noUnknown(true)
 	.strict();
@@ -18,7 +18,7 @@ export const userSchema = object({
 
 export const updateUserSchema = object({
 	name: string().nullable(),
-	email: string().email(),
+	email: string().email("Valid email not provided."),
 })
 	.noUnknown(true)
 	.strict();
