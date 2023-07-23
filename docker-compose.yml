@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+  api:
+    environment:
+        PORT: 3000
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    env_file:
+      - .env.development.local
+    ports:
+      - "3000:3000"
+  api2:
+    environment:
+        PORT: 3001
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    env_file:
+      - .env.development.local
+    ports:
+      - "3001:3001"
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=admin
+    ports:
+      - "5432:5432"
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "placeholder@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "fakepassword123!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres

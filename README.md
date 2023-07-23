@@ -92,6 +92,14 @@ The project utilizes several dependencies, including Express, Postgres, Jest, Ax
 
 The project requires specific environment variables for configuration. Refer to the [Installation](#installation) section for details on setting up the `.env.local` file.
 
+## Docker compose with nginx as load balancer for 2 servers
+
+- We have created a new service named `nginx`, which will act as the load balancer.
+- The Nginx configuration file `nginx.conf` is assumed to be present in the `./nginx` directory. It is mounted into the Nginx container at the path `/etc/nginx/nginx.conf`. The configuration in `nginx.conf` should include the load balancer settings, directing requests to the two `api` services (`api` and `api2`).
+- The `depends_on` section for the `nginx` service ensures that the load balancer starts after the `api` and `api2` services are up and running.
+
+Please ensure you have the appropriate Nginx configuration (`nginx.conf`) in the `./nginx` directory before running the `docker-compose` file. The `nginx.conf` file should contain the necessary load balancing settings for Nginx to distribute incoming requests between the `api` and `api2` services.
+
 ## License
 
 This project is licensed under the ISC License. See the [LICENSE](LICENSE) file for details.
