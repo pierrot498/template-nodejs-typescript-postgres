@@ -62,7 +62,6 @@ class AuthController {
 			}
 			const clientAuth = new AuthService();
 			const client: ClientAccount = req.body;
-			console.log(client);
 			const result = await clientAuth.login(client);
 			res.status(Number(result.statusCode)).json(result.response);
 		} catch (error) {

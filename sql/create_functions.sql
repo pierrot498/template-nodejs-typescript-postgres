@@ -206,7 +206,7 @@ Begin
     where id=user_id_in and client_id=client_id_in;
 
 
-	return 'Archived'; 
+	return user_id_in; 
 EXCEPTION
     WHEN OTHERS THEN
     ROLLBACK;

@@ -32,7 +32,7 @@ afterAll(async () => {
 	await callSQLStatement(drop_users);
 });
 describe("Auth", (): void => {
-	it("POST /user should create user and return 200", async (): Promise<void> => {
+	it("POST /user should create user and return status 200", async (): Promise<void> => {
 		const response = await request(app)
 			.post("/user")
 			.send({
@@ -45,6 +45,31 @@ describe("Auth", (): void => {
 		id = response.body.user_id;
 		app.close();
 	});
+	it("POST /user should create user and return status 400 when not setting right email", async (): Promise<void> => {
+		const response = await request(app)
+			.post("/user")
+			.send({
+				name: "paul",
+				email: "client",
+			})
+			.set("Authorization", `Bearer ${token}`);
+		expect(response.body.message).toStrictEqual("Valid email not provided.");
+		expect(response.statusCode).toBe(400);
+		app.close();
+	});
+
+	it("POST /user should create user and return status 401 when not setting right bearer token", async (): Promise<void> => {
+		const response = await request(app)
+			.post("/user")
+			.send({
+				name: "paul",
+				email: "client",
+			})
+			.set("Authorization", `Bearer ${token + "t"}`);
+		expect(response.body.message).toStrictEqual("Invalid access token");
+		expect(response.statusCode).toBe(401);
+		app.close();
+	});
 
 	it("PUT /user/:id should update user and return 200", async (): Promise<void> => {
 		const response = await request(app)
@@ -54,12 +79,25 @@ describe("Auth", (): void => {
 				email: "client@gmail.com",
 			})
 			.set("Authorization", `Bearer ${token}`);
-		expect(response.body).toStrictEqual({});
+		expect(response.body).toStrictEqual({ message: "Successfuly updated" });
 		expect(response.statusCode).toBe(200);
 		app.close();
 	});
 
-	it("GET /user/1 should get information from the user", async (): Promise<void> => {
+	it("PUT /user/:id should update user and return status 400 as it is an invalid email provided", async (): Promise<void> => {
+		const response = await request(app)
+			.put("/user/" + id)
+			.send({
+				name: "paul1",
+				email: "client",
+			})
+			.set("Authorization", `Bearer ${token}`);
+		expect(response.body.message).toStrictEqual("Valid email not provided.");
+		expect(response.statusCode).toBe(400);
+		app.close();
+	});
+
+	it("GET /user/:id should get information from the user", async (): Promise<void> => {
 		const response = await request(app)
 			.get("/user/" + id)
 			.send()
@@ -73,14 +111,40 @@ describe("Auth", (): void => {
 		app.close();
 	});
 
-	it("DELETE /user/:id should delete user and return 200", async (): Promise<void> => {
+	it("GET /user/:id should return status 404 when providing wrong id", async (): Promise<void> => {
+		const response = await request(app)
+			.get("/user/" + 150)
+			.send()
+			.set("Authorization", `Bearer ${token}`);
+
+		expect(response.body.message).toStrictEqual(
+			`User not found (user_ID: ${150})`,
+		);
+
+		expect(response.statusCode).toBe(404);
+		app.close();
+	});
+	it("GET /user/:id should return status 400 when providing id as string", async (): Promise<void> => {
+		const response = await request(app)
+			.get("/user/tes")
+			.send()
+			.set("Authorization", `Bearer ${token}`);
+
+		expect(response.body.message).toStrictEqual(
+			`Invalid Input Data (not present)`,
+		);
+
+		expect(response.statusCode).toBe(400);
+		app.close();
+	});
+	it("DELETE /user/:id should delete user and return status 200", async (): Promise<void> => {
 		const response = await request(app)
 			.delete("/user/" + id)
 			.send()
 			.set("Authorization", `Bearer ${token}`);
 		expect(response.body).toStrictEqual({
-			message: "Deleted (user_ID: Archived)",
-			user_id: "Archived",
+			message: "Deleted (user_ID: " + id + ")",
+			user_id: id,
 		});
 		expect(response.statusCode).toBe(200);
 		app.close();

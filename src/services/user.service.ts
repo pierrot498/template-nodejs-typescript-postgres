@@ -51,11 +51,8 @@ class UserService {
 			logger.error(
 				`Insert user with client ${client_id} and user email ${userData.email} failed with error ${e.message}`,
 			);
-			if (e.code === "23505" || e.code === "2D000") {
-				throw new HttpException(409, "User exists");
-			} else {
-				throw e;
-			}
+
+			throw new HttpException(500, "Failed to insert user.");
 		}
 	}
 
@@ -76,7 +73,6 @@ class UserService {
 
 		//Used to recreate the data needed for the insertion
 		const array: any[] = [user_id];
-		console.log([client_id, user_id]);
 		const select = await db.query({
 			text: "select * from public.get_user_by_client_id_by_id($1, $2)",
 			values: [client_id, user_id],
@@ -132,7 +128,6 @@ class UserService {
 			text: "select * from get_user_json($1, $2)",
 			values: [id, client_id],
 		});
-		console.log(findUser);
 		return findUser;
 	}
 }

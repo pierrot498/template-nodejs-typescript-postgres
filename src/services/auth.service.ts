@@ -48,8 +48,6 @@ class AuthService {
 		response: { token: String };
 		message: string;
 	}> {
-		console.log([clientData.email, bcrypt.hashSync(clientData.password, 8)]);
-
 		const client = await db.query({
 			text: "select * from get_password_client($1)",
 			values: [clientData.email],

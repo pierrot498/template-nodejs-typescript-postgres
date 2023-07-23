@@ -34,7 +34,7 @@ describe("Auth", (): void => {
 			email: "client@gmail.com",
 			password: "testclient50",
 		});
-		expect(response.body.message).toStrictEqual("Email already used");
+		expect(response.body.message).toStrictEqual("Email already in use");
 		expect(response.statusCode).toBe(409);
 		app.close();
 	});
@@ -71,7 +71,7 @@ describe("Auth", (): void => {
 			email: "client@gmail.com",
 			password: "testclient501",
 		});
-		expect(typeof response.body.message).toStrictEqual("Invalid credentials");
+		expect(response.body.message).toStrictEqual("Invalid credentials");
 		expect(response.statusCode).toBe(401);
 		app.close();
 	});
