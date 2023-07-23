@@ -132,7 +132,6 @@ class UserController {
 	): Promise<void> => {
 		let message: string;
 
-		const user_id = req.params.user__id;
 		let code = 0;
 		let data: any = null;
 		try {
@@ -158,6 +157,45 @@ class UserController {
 				message = "Invalid Input Data (not present)";
 			}
 			res.status(code).json({ message, user_id, data });
+		} catch (error) {
+			next(error);
+		}
+	};
+	/**
+	 * @method getUserByName
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @param {NextFunction} next
+	 * @description retrieves an existing user
+	 */
+	public getUserByName = async (
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> => {
+		let message: string;
+
+		let code = 0;
+		let data: any = null;
+		try {
+			const client_id = Number(res.locals.client_id);
+			const username: String = String(req.query.username);
+
+			const userDatas: any = await this.userService.findUserByName(
+				username,
+				client_id,
+			);
+
+			if (userDatas.length > 0) {
+				code = 200;
+				data = userDatas;
+				message = `Sent (user name like: ${username})`;
+			} else {
+				code = 404;
+				message = `User not found (user name like: ${username})`;
+			}
+
+			res.status(code).json({ message, username, data });
 		} catch (error) {
 			next(error);
 		}

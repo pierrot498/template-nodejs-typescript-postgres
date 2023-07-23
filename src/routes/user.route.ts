@@ -19,6 +19,7 @@ class UserRoute implements Routes {
 
 	private initializeRoutes() {
 		this.router.get(`${this.path}/:user_id`, this.userController.getUser);
+		this.router.get(`${this.path}`, this.userController.getUserByName);
 		this.router.post(`${this.path}`, this.userController.insertUser);
 		this.router.put(`${this.path}/:user_id`, this.userController.updateUser);
 
