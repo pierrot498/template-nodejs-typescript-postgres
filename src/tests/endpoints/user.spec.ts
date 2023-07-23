@@ -143,9 +143,7 @@ describe("Auth", (): void => {
 			.send()
 			.set("Authorization", `Bearer ${token}`);
 
-		expect(response.body.message).toStrictEqual(
-			"User not found (user name like: a)",
-		);
+		expect(response.body.message).toStrictEqual("Sent (user name like: u)");
 		expect(response.body.data[0].name).toStrictEqual("paul1");
 		expect(response.body.data[0].email).toStrictEqual("client@gmail.com");
 		expect(response.statusCode).toBe(200);
@@ -153,13 +151,13 @@ describe("Auth", (): void => {
 	});
 	it("GET /user?username=a should return status 404 when providing part of a unexisting user name", async (): Promise<void> => {
 		const response = await request(app)
-			.get("/user?username=a")
+			.get("/user?username=aa")
 			.send()
 			.set("Authorization", `Bearer ${token}`);
 
 		expect(response.body).toStrictEqual({
-			message: "User not found (user name like: a)",
-			username: "a",
+			message: "User not found (user name like: aa)",
+			username: "aa",
 			data: null,
 		});
 
