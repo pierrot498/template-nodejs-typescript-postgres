@@ -144,7 +144,6 @@ class UserService {
 				client_id,
 			)}`,
 		);
-		console.log([name, client_id]);
 		const findUsers = await db.query({
 			text: "select * from get_user_table_patial_match_by_name($1::varchar, $2::int)",
 			values: [name as string, client_id],

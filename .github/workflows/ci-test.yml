@@ -43,8 +43,8 @@ jobs:
           psql -h 127.0.0.1 -p5432 -U postgres -c 'DROP DATABASE IF EXISTS example'	
           psql -h 127.0.0.1 -p5432 -U postgres -c 'CREATE DATABASE example'	
           psql -h 127.0.0.1 -p5432 -U postgres -c 'ALTER DATABASE example SET TIME ZONE ''UTC'''	
-          psql -h 127.0.0.1 -p5432 -d example -U postgres -f "./sql/create_tables.sql"
-          psql -h 127.0.0.1 -p5432 -d example -U postgres -f "./sql/create_functions.sql"
+          psql -h 127.0.0.1 -p5432 -d example -U postgres -f "./sql/1_create_tables.sql"
+          psql -h 127.0.0.1 -p5432 -d example -U postgres -f "./sql/2_create_functions.sql"
 
       - name: Run tests
         run: npm run test

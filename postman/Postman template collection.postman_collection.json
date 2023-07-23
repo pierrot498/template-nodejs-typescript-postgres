@@ -221,6 +221,35 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get user filtered by username",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{JWT_TOKEN}}",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/user?username=u",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"user"
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "u"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
