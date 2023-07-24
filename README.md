@@ -1,8 +1,9 @@
 # Template TypeScript Node.js Backend with Postgres Database
 
 This repository serves as a template for creating a TypeScript-based Node.js backend with a Postgres database. It includes configurations for various tools and technologies to help you get started quickly with building a robust backend for your projects.
-
-Here's the Database diagram :
+##Sequence diagram :
+![Sequence Diagram](./sequence-diagram.png)
+##Database diagram :
 ![Database Diagram](./sql/diagram.png)
 
 ## Table of Contents
